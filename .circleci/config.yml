@@ -1,0 +1,147 @@
+version: 2
+
+rabbitmq: &rabbitmq
+  image: rabbitmq:3-alpine
+
+restore: &restore
+  restore_cache:
+    key: deps-{{ checksum "package-lock.json" }}
+
+cache: &cache
+  save_cache:
+    key: deps-{{ checksum "package-lock.json" }}
+    paths:
+      - node_modules/
+
+make: &make
+  run:
+    name: Install GNU Make
+    command: apk add make --no-cache
+
+wait: &wait
+  run:
+    name: Wait For RabbitMQ To Start
+    command: until nc -z 127.0.0.1 5672; do sleep 1; done
+
+test: &test
+  steps:
+    - checkout
+    - *restore
+    - *make
+    - run:
+        name: Install Dependencies
+        command: make deps
+    - *cache
+    - *wait
+    - run:
+        name: Run Tests
+        command: make test
+
+jobs:
+  lint:
+    docker:
+      - image: node:13-alpine
+    steps:
+      - checkout
+      - run:
+          name: Install ESLint
+          command: npm install --no-save eslint@^6.8.0
+      - *make
+      - run:
+          name: Run ESLint
+          command: make lint
+
+  node8:
+    docker:
+      - image: node:8-alpine
+      - *rabbitmq
+    <<: *test
+
+  node10:
+    docker:
+      - image: node:10-alpine
+      - *rabbitmq
+    <<: *test
+
+  node11:
+    docker:
+      - image: node:11-alpine
+      - *rabbitmq
+    <<: *test
+
+  node12:
+    docker:
+      - image: node:12-alpine
+      - *rabbitmq
+    <<: *test
+
+  node14:
+    docker:
+      - image: node:14-alpine
+      - *rabbitmq
+    <<: *test
+
+  coverage:
+    docker:
+      - image: node:13-alpine
+      - *rabbitmq
+    steps:
+      - checkout
+      - *restore
+      - *make
+      - run:
+          name: Install Dependencies
+          command: make deps
+      - *cache
+      - *wait
+      - run:
+          name: Run Tests & Calculate Coverage
+          command: make coverage
+
+      - persist_to_workspace:
+          root: coverage
+          paths:
+            - lcov.info
+
+  report_coverage:
+    docker:
+      - image: node:13-alpine
+    steps:
+      - run: apk add --no-cache git ca-certificates curl
+
+      - attach_workspace:
+          at: /tmp/coverage
+
+      - checkout
+
+      - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > reporter
+      - run: chmod +x reporter
+      - run: ./reporter format-coverage -t lcov /tmp/coverage/lcov.info -o codeclimate.json
+      - run: ./reporter upload-coverage -i codeclimate.json
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - lint
+      - node8:
+          requires:
+            - lint
+      - node10:
+          requires:
+            - lint
+      - node11:
+          requires:
+            - lint
+      - node12:
+          requires:
+            - lint
+      - node14:
+          requires:
+            - lint
+      - coverage:
+          requires:
+            - lint
+      - report_coverage:
+          requires:
+            - coverage

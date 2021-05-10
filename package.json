@@ -17,5 +17,14 @@
   "bugs": {
     "url": "https://github.com/openrm/hato-logging-plugin/issues"
   },
-  "homepage": "https://github.com/openrm/hato-logging-plugin#readme"
+  "homepage": "https://github.com/openrm/hato-logging-plugin#readme",
+  "dependencies": {
+    "hato": "0.0.8"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
+    "sinon": "^10.0.0"
+  }
 }
