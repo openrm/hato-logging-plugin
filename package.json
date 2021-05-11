@@ -2,7 +2,7 @@
   "name": "hato-logging-plugin",
   "version": "0.0.1",
   "description": "A plugin for logging messages passing through hato",
-  "main": "index.js",
+  "main": "src/log.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/openrm/hato-logging-plugin.git"
