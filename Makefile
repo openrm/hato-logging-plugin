@@ -17,7 +17,7 @@ coverage:
 	@$(NPM_BIN)/nyc -x "test/*" -x "**/*.spec.js" --reporter=lcov --reporter=text-lcov --reporter=text $(MAKE) -s test
 
 lint:
-	@$(NPM_BIN)/eslint index.js plugins lib
+	@$(NPM_BIN)/eslint src
 
 lint-fix:
-	@$(NPM_BIN)/eslint index.js plugins lib --fix
+	@$(NPM_BIN)/eslint src
