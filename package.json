@@ -1,0 +1,30 @@
+{
+  "name": "hato-logging-plugin",
+  "version": "0.0.1",
+  "description": "A plugin for logging messages passing through hato",
+  "main": "src/log.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openrm/hato-logging-plugin.git"
+  },
+  "keywords": [
+    "hato",
+    "amqp",
+    "logging"
+  ],
+  "author": "Open Room Inc.",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/openrm/hato-logging-plugin/issues"
+  },
+  "homepage": "https://github.com/openrm/hato-logging-plugin#readme",
+  "peerDependencies": {
+    "hato": "0.0.8"
+  },
+  "devDependencies": {
+    "eslint": "^7.26.0",
+    "mocha": "^8.4.0",
+    "nyc": "^15.1.0",
+    "sinon": "^10.0.0"
+  }
+}
