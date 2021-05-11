@@ -7,6 +7,7 @@ export NODE_ENV ?= test
 
 node_modules: package.json
 	@npm install
+	@npm install hato
 
 deps: node_modules
 
