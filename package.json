@@ -18,7 +18,7 @@
     "url": "https://github.com/openrm/hato-logging-plugin/issues"
   },
   "homepage": "https://github.com/openrm/hato-logging-plugin#readme",
-  "dependencies": {
+  "peerDependencies": {
     "hato": "0.0.8"
   },
   "devDependencies": {
