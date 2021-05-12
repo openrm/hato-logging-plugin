@@ -51,12 +51,6 @@ jobs:
           name: Run ESLint
           command: make lint
 
-  node8:
-    docker:
-      - image: node:8-alpine
-      - *rabbitmq
-    <<: *test
-
   node10:
     docker:
       - image: node:10-alpine
@@ -124,9 +118,6 @@ workflows:
   build:
     jobs:
       - lint
-      - node8:
-          requires:
-            - lint
       - node10:
           requires:
             - lint

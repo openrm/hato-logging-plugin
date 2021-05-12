@@ -1,5 +1,6 @@
 # hato-logging-plugin
 
+[![CircleCI](https://img.shields.io/circleci/build/github/openrm/hato)](https://app.circleci.com/pipelines/github/openrm/hato-logging-plugin?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/87ff47742751f9a49a6b/maintainability)](https://codeclimate.com/github/openrm/hato-logging-plugin/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/87ff47742751f9a49a6b/test_coverage)](https://codeclimate.com/github/openrm/hato-logging-plugin/test_coverage)
 [![GitHub license](https://img.shields.io/github/license/openrm/hato-logging-plugin)](https://github.com/openrm/hato-logging-plugin/blob/master/LICENSE)
