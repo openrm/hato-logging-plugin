@@ -24,12 +24,12 @@ describe('log plugin', () => {
     beforeEach(async() => {
         emitter = new EventEmitter();
 
-        const logger = (data) => {
+        const logger = (level, data) => {
             emitter.emit('log', data);
         };
 
         client = await new Client('amqp://guest:guest@127.0.0.1:5672', {
-            plugins: [new plugins.Encoding('json'), new Log(logger)]
+            plugins: [new plugins.Encoding('json'), new Log({ log: logger, body: { enabled: true } })]
         })
             .start();
     });
