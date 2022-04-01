@@ -40,28 +40,16 @@ test: &test
 jobs:
   lint:
     docker:
-      - image: node:13-alpine
+      - image: node:14-alpine
     steps:
       - checkout
       - run:
           name: Install ESLint
-          command: npm install --no-save eslint@^6.8.0
+          command: npm install --no-save eslint
       - *make
       - run:
           name: Run ESLint
           command: make lint
-
-  node10:
-    docker:
-      - image: node:10-alpine
-      - *rabbitmq
-    <<: *test
-
-  node11:
-    docker:
-      - image: node:11-alpine
-      - *rabbitmq
-    <<: *test
 
   node12:
     docker:
@@ -69,15 +57,15 @@ jobs:
       - *rabbitmq
     <<: *test
 
-  node14:
+  node17:
     docker:
-      - image: node:14-alpine
+      - image: node:17-alpine
       - *rabbitmq
     <<: *test
 
   coverage:
     docker:
-      - image: node:13-alpine
+      - image: node:14-alpine
       - *rabbitmq
     steps:
       - checkout
@@ -99,7 +87,7 @@ jobs:
 
   report_coverage:
     docker:
-      - image: node:13-alpine
+      - image: node:14-alpine
     steps:
       - run: apk add --no-cache git ca-certificates curl
 
@@ -118,16 +106,10 @@ workflows:
   build:
     jobs:
       - lint
-      - node10:
-          requires:
-            - lint
-      - node11:
-          requires:
-            - lint
       - node12:
           requires:
             - lint
-      - node14:
+      - node17:
           requires:
             - lint
       - coverage:
