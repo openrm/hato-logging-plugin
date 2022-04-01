@@ -46,6 +46,8 @@ describe('log plugin', () => {
                 assert.strictEqual(data.routingKey, 'a.routing.key');
                 assert.strictEqual(data.exchange, 'amq.direct');
                 assert.strictEqual(data.command, 'publish');
+                assert.strictEqual(data.properties.contentType, 'application/json');
+                assert.deepStrictEqual(data.properties.headers, { 'x-test': 'true' });
             };
 
             // Message is logged twice, once when published, once when consumed and acknowledged
@@ -61,7 +63,7 @@ describe('log plugin', () => {
             // Publish message
             client
                 .type('direct')
-                .publish('a.routing.key', { string: 'string' })
+                .publish('a.routing.key', { string: 'string' }, { headers: { 'x-test': 'true' } })
                 .then(deferred.resolve)
                 .catch(done);
         });
@@ -110,6 +112,7 @@ describe('log plugin', () => {
                 assert.strictEqual(data.routingKey, 'a.routing.key');
                 assert.strictEqual(data.exchange, 'amq.topic');
                 assert.strictEqual(data.command, 'consume');
+                assert.strictEqual(data.properties.contentType, 'application/json');
                 done();
             };
 

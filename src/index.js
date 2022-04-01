@@ -119,7 +119,10 @@ module.exports = class extends plugins.Base {
                     command: 'publish',
                     exchange: fields.exchange,
                     routingKey: fields.routingKey,
-                    properties,
+                    properties: {
+                        ...properties,
+                        headers: Object.getPrototypeOf(properties.headers)
+                    },
                     content: plugin.serializeContent(content)
                 }, 'Message published.');
             } catch (err) {
