@@ -19,15 +19,14 @@
   },
   "homepage": "https://github.com/openrm/hato-logging#readme",
   "peerDependencies": {
-    "hato": ">=0.0.11"
+    "hato": ">=0.0.13"
   },
   "devDependencies": {
     "amqplib": "^0.8.0",
     "eslint": "^7.26.0",
-    "hato": "git+https://github.com/openrm/hato.git",
+    "hato": "^0.0.13",
     "mocha": "^8.4.0",
-    "nyc": "^15.1.0",
-    "sinon": "^13.0.1"
+    "nyc": "^15.1.0"
   },
   "engines": {
     "node": ">= 10"
