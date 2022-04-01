@@ -95,9 +95,9 @@ module.exports = class extends plugins.Base {
                 content : JSON.stringify(content);
             const {
                 enabled = false,
-                maxLen = 1000
+                maxBytes = 1000
             } = this.options.body || {};
-            if (!enabled || buf.length > maxLen) return;
+            if (!enabled || buf.length > maxBytes) return;
             try {
                 return JSON.parse(buf);
             } catch {
