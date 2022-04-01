@@ -1,9 +1,9 @@
-# hato-logging-plugin
+# hato-logging
 
-[![CircleCI](https://img.shields.io/circleci/build/github/openrm/hato)](https://app.circleci.com/pipelines/github/openrm/hato-logging-plugin?branch=master)
-[![Maintainability](https://api.codeclimate.com/v1/badges/87ff47742751f9a49a6b/maintainability)](https://codeclimate.com/github/openrm/hato-logging-plugin/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/87ff47742751f9a49a6b/test_coverage)](https://codeclimate.com/github/openrm/hato-logging-plugin/test_coverage)
-[![GitHub license](https://img.shields.io/github/license/openrm/hato-logging-plugin)](https://github.com/openrm/hato-logging-plugin/blob/master/LICENSE)
+[![CircleCI](https://img.shields.io/circleci/build/github/openrm/hato)](https://app.circleci.com/pipelines/github/openrm/hato-logging?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/87ff47742751f9a49a6b/maintainability)](https://codeclimate.com/github/openrm/hato-logging/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/87ff47742751f9a49a6b/test_coverage)](https://codeclimate.com/github/openrm/hato-logging/test_coverage)
+[![GitHub license](https://img.shields.io/github/license/openrm/hato-logging)](https://github.com/openrm/hato-logging/blob/master/LICENSE)
 
 A plugin for logging messages passing through hato
 
@@ -28,12 +28,18 @@ The plugin accepts a logging function to which messages will be passed as they a
 Import the package
 
 ```js
-const Logging = require('hato-logging-plugin');
+const Logging = require('hato-logging');
 ```
 
 Instantiate the logging plugin with a logging function of your choice, if left empty the default is `console.log`
 ```js
-const MyLogger = new Logging(console.log);
+const MyPlugin = new Logging({
+    log: (level, data, msg) => logger[level](data, msg), // example: bunyan
+    body: {
+        enabled: true,
+        maxBytes: 10000
+    }
+});
 ```
 
 Construct a new client including the logging plugin
@@ -41,7 +47,7 @@ Construct a new client including the logging plugin
 const client = new Client(BROKER_URL, {
     plugins: [
         ...,
-        MyLogger
+        MyPlugin
     ],
 });
 ```
