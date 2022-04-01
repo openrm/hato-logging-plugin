@@ -19,12 +19,12 @@
   },
   "homepage": "https://github.com/openrm/hato-logging#readme",
   "peerDependencies": {
-    "hato": ">=0.0.13"
+    "hato": ">=0.0.14"
   },
   "devDependencies": {
     "amqplib": "^0.8.0",
     "eslint": "^7.26.0",
-    "hato": "^0.0.13",
+    "hato": "^0.0.14",
     "mocha": "^8.4.0",
     "nyc": "^15.1.0"
   },
