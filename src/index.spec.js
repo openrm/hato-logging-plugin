@@ -2,7 +2,7 @@ const assert = require('assert');
 const EventEmitter = require('events');
 
 const { Client, plugins } = require('hato');
-const Log = require('./log');
+const Log = require('.');
 
 // Externally resolvable promise
 class Deferred {
