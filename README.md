@@ -16,7 +16,7 @@ The plugin accepts a logging function to which messages will be passed as they a
 
 ```
 {
-    action, // Either 'publish' or 'consume'
+    command, // Either 'publish' or 'consume'
     exchange,
     routingKey,
     content

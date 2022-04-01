@@ -45,7 +45,7 @@ describe('log plugin', () => {
                 assert.deepStrictEqual(data.content, { string: 'string' });
                 assert.strictEqual(data.routingKey, 'a.routing.key');
                 assert.strictEqual(data.exchange, 'amq.direct');
-                assert.strictEqual(data.action, 'publish');
+                assert.strictEqual(data.command, 'publish');
             };
 
             // Message is logged twice, once when published, once when consumed and acknowledged
@@ -74,7 +74,7 @@ describe('log plugin', () => {
                 assert.deepStrictEqual(data.content, { string: 'string' });
                 assert.strictEqual(data.routingKey, 'a.routing.key');
                 assert.strictEqual(data.exchange, 'amq.topic');
-                assert.strictEqual(data.action, 'publish');
+                assert.strictEqual(data.command, 'publish');
             };
 
             // Message is logged twice, once when published, once when consumed and acknowledged
@@ -109,13 +109,13 @@ describe('log plugin', () => {
                 assert.deepStrictEqual(data.content, { string: 'string' });
                 assert.strictEqual(data.routingKey, 'a.routing.key');
                 assert.strictEqual(data.exchange, 'amq.topic');
-                assert.strictEqual(data.action, 'consume');
+                assert.strictEqual(data.command, 'consume');
                 done();
             };
 
             // Check the message when it is logged
             emitter.on('log', (data) => {
-                if (data.action === 'consume') check(data);
+                if (data.command === 'consume') check(data);
             });
 
             // Subscribe and acknowledge message

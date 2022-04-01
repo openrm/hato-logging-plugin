@@ -62,7 +62,7 @@ module.exports = class extends plugins.Base {
                 try {
                     plugin.log('info', {
                         ...plugin.connFields,
-                        action: 'consume',
+                        command: 'consume',
                         exchange: fields.exchange,
                         routingKey: fields.routingKey,
                         options,
@@ -116,7 +116,7 @@ module.exports = class extends plugins.Base {
                 const [, , fields, , properties, content] = arguments;
                 plugin.log('info', {
                     ...this.connFields,
-                    action: 'publish',
+                    command: 'publish',
                     exchange: fields.exchange,
                     routingKey: fields.routingKey,
                     properties,
