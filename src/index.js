@@ -56,14 +56,15 @@ module.exports = class extends plugins.Base {
                 const { fields, properties, content } = msg;
                 // Log with the provided function
                 try {
-                    const msg = plugin.getMessage(
-                        'consume', fields.exchange, fields.routingKey, content);
+                    const msg = plugin.getMessage('consume',
+                        fields.exchange, fields.routingKey, content, queue);
                     plugin.log('info', {
                         ...plugin.connFields,
                         command: 'consume',
+                        queue,
+                        options,
                         exchange: fields.exchange,
                         routingKey: fields.routingKey,
-                        options,
                         fields,
                         properties,
                         content: plugin.serializeContent(content)
@@ -103,6 +104,7 @@ module.exports = class extends plugins.Base {
                 ...this.connFields,
                 err,
                 command: 'publish',
+                options,
                 exchange,
                 routingKey,
                 properties: {
@@ -125,13 +127,15 @@ module.exports = class extends plugins.Base {
         }
     }
 
-    getMessage(command, exchange, routingKey) {
+    getMessage(command, exchange, routingKey, content, queue) {
         const {
             protocolVersion,
-            system,
-            remoteAddress
+            system
         } = this.connFields;
-        return `${remoteAddress} - "${command} : ${exchange || '<default>'} -> ${routingKey} AMQP/${protocolVersion}" "${system}"`;
+        const contentLen = Buffer.isBuffer(content) ? `${content.length}B` : '-';
+        const flow = `[${command}] ${exchange || '(default)'} -> ${routingKey}`
+            + (command === 'consume' ? ` -> ${queue}` : '');
+        return `AMQP/${protocolVersion} ${flow} ${contentLen} "${system}"`;
     }
 
     serializeContent(content) {
