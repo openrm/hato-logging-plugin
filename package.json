@@ -30,8 +30,5 @@
   },
   "engines": {
     "node": ">= 10"
-  },
-  "dependencies": {
-    "shimmer": "^1.2.1"
   }
 }
