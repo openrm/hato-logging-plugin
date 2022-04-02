@@ -56,6 +56,8 @@ module.exports = class extends plugins.Base {
                 const { fields, properties, content } = msg;
                 // Log with the provided function
                 try {
+                    const msg = plugin.getMessage(
+                        'consume', fields.exchange, fields.routingKey, content);
                     plugin.log('info', {
                         ...plugin.connFields,
                         command: 'consume',
@@ -65,7 +67,7 @@ module.exports = class extends plugins.Base {
                         fields,
                         properties,
                         content: plugin.serializeContent(content)
-                    }, 'Message delivered.');
+                    }, msg);
                 } catch (err) {
                     plugin.log('warn', { err }, '[AMQP:log] Message logging failed.');
                 }
@@ -76,10 +78,27 @@ module.exports = class extends plugins.Base {
         };
     }
 
+    onPublish() {
+        const plugin = this;
+        return (publish) => (exchange, routingKey, content, options, cb) => {
+            if (typeof cb !== 'function') {
+                const ok = publish(exchange, routingKey, content, options);
+                plugin.logPublish(exchange, routingKey, content, options);
+                return ok;
+            }
+            return publish(exchange, routingKey, content, options, function(err) {
+                cb(err);
+                plugin.logPublish(exchange, routingKey, content, options, err);
+            });
+        };
+    }
+
     logPublish(exchange, routingKey, content, options, err) {
         // Log with the provided function
         try {
             const properties = Args.publish(exchange, routingKey, options);
+            const msg = this.getMessage(
+                'publish', exchange, routingKey, content);
             this.log('info', {
                 ...this.connFields,
                 err,
@@ -91,24 +110,10 @@ module.exports = class extends plugins.Base {
                     headers: Object.getPrototypeOf(properties.headers)
                 },
                 content: this.serializeContent(content)
-            }, 'Message published.');
+            }, msg);
         } catch (err) {
             this.log('warn', { err }, '[AMQP:log] Message logging failed.');
         }
-    }
-
-    onPublish() {
-        const plugin = this;
-        return (publish) => (exchange, routingKey, content, options, cb) => {
-            if (typeof cb !== 'function') {
-                plugin.logPublish(exchange, routingKey, content, options);
-                return publish(exchange, routingKey, content, options);
-            }
-            return publish(exchange, routingKey, content, options, function(err) {
-                cb(err);
-                plugin.logPublish(exchange, routingKey, content, options, err);
-            });
-        };
     }
 
     extractProtocol(url) {
@@ -118,6 +123,15 @@ module.exports = class extends plugins.Base {
             url = new URL(url);
             this.connFields.protocol = url.protocol.replace(/:$/, '');
         }
+    }
+
+    getMessage(command, exchange, routingKey) {
+        const {
+            protocolVersion,
+            system,
+            remoteAddress
+        } = this.connFields;
+        return `${remoteAddress} - "${command} : ${exchange || '<default>'} -> ${routingKey} AMQP/${protocolVersion}" "${system}"`;
     }
 
     serializeContent(content) {
