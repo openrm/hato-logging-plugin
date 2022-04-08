@@ -133,8 +133,14 @@ module.exports = class extends plugins.Base {
             system
         } = this.connFields;
         const contentLen = Buffer.isBuffer(content) ? `${content.length}B` : '-';
-        const flow = `[${command}] ${exchange || '(default)'} -> ${routingKey}`
-            + (command === 'consume' ? ` -> ${queue}` : '');
+        const nodes = [];
+        if (command === 'consume' && exchange) {
+            nodes.push(exchange, routingKey, queue);
+        } else {
+            // publish or default exchange, in which case queue = routing key
+            nodes.push(exchange || '(default)', routingKey);
+        }
+        const flow = `[${command}] ${nodes.join(' -> ')}`;
         return `AMQP/${protocolVersion} ${flow} ${contentLen} "${system}"`;
     }
 
