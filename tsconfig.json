@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "target": "es6",
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "lib": [
+            "es6"
+        ],
+        "declaration": true,
+        "noEmit": true
+    },
+    "include": ["src/**/*.ts"]
+}

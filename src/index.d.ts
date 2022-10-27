@@ -1,9 +1,14 @@
 import hato from 'hato';
 
-export as namespace LoggingPlugin
+export as namespace hatoLogging;
 
-declare class LoggingPlugin extends hato.Plugin {
-    constructor()
-}
+type LogLevel = 'debug' | 'info' | 'warn';
+type LogTransform = (level: LogLevel, struct: object, msg: string) => void;
+type Logger = {
+    [key in LogLevel]: (struct: object, msg: string) => void;
+};
 
-export = LoggingPlugin
+type Options = LogTransform | { log?: LogTransform, logger?: Logger };
+declare const Plugin: hato.Plugins.Plugin<Options>;
+
+export = Plugin;
