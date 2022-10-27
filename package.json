@@ -1,6 +1,6 @@
 {
   "name": "hato-logging",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A plugin for logging messages passing through hato",
   "main": "src/index.js",
   "repository": {
