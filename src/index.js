@@ -52,6 +52,7 @@ module.exports = class extends plugins.Base {
     onConsume() {
         const plugin = this;
         return (consume) => (queue, fn, options) => {
+            if (options?.silent) return consume(queue, fn, options);
             const handler = function(msg) {
                 const { fields, properties, content } = msg;
                 // Log with the provided function
@@ -97,6 +98,7 @@ module.exports = class extends plugins.Base {
     logPublish(exchange, routingKey, content, options, err) {
         // Log with the provided function
         try {
+            if (options?.silent) return;
             const properties = Args.publish(exchange, routingKey, options);
             const msg = this.getMessage(
                 'publish', exchange, routingKey, content);
